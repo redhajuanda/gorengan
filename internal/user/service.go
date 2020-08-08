@@ -6,6 +6,7 @@ import (
 
 	"github.com/redhajuanda/gorengan/internal/domain"
 	"github.com/redhajuanda/gorengan/pkg/log"
+	"github.com/redhajuanda/gorengan/pkg/password"
 	"github.com/redhajuanda/gorengan/pkg/validation"
 )
 
@@ -38,6 +39,7 @@ type UpdateUserRequest struct {
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	Email     string `json:"email" validate:"email"`
+	Address   string `json:"address"`
 }
 
 type service struct {
@@ -68,13 +70,18 @@ func (s service) Create(ctx context.Context, req CreateUserRequest) (User, error
 		return User{}, err
 	}
 
+	hashedPwd, err := password.HashAndSalt([]byte(req.Password))
+	if err != nil {
+		return User{}, err
+	}
+
 	id := domain.GenerateID()
 	err = s.repo.Create(ctx, domain.User{
 		ID:        id,
 		Email:     req.Email,
 		FirstName: req.FirstName,
 		LastName:  req.LastName,
-		Password:  req.Password,
+		Password:  hashedPwd,
 		Address:   req.Address,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
@@ -98,6 +105,7 @@ func (s service) Update(ctx context.Context, id string, req UpdateUserRequest) (
 		return user, err
 	}
 	user.Email = req.Email
+	user.Address = req.Address
 	user.UpdatedAt = time.Now()
 
 	if err := s.repo.Update(ctx, user.User); err != nil {

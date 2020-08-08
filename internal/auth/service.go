@@ -7,6 +7,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/redhajuanda/gorengan/internal/httperror"
 	"github.com/redhajuanda/gorengan/pkg/log"
+	"github.com/redhajuanda/gorengan/pkg/password"
 	"github.com/redhajuanda/gorengan/pkg/validation"
 )
 
@@ -61,7 +62,7 @@ func (s service) Login(ctx context.Context, req LoginRequest) (string, error) {
 
 // authenticate authenticates a user using email and password.
 // If email and password are correct, an identity is returned. Otherwise, nil is returned.
-func (s service) authenticate(ctx context.Context, email, password string) Identity {
+func (s service) authenticate(ctx context.Context, email, plainPwd string) Identity {
 	logger := s.logger.With(ctx, "user", email)
 
 	user, err := s.repo.Login(ctx, email)
@@ -69,7 +70,7 @@ func (s service) authenticate(ctx context.Context, email, password string) Ident
 		return nil
 	}
 
-	if email == user.Email && password == user.Password {
+	if email == user.Email && password.ComparePasswords(user.Password, []byte(plainPwd)) {
 		logger.Infof("authentication successful")
 		return user
 	}

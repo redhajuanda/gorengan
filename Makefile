@@ -23,3 +23,5 @@ migrate-fresh:
 	@echo "Running migration..."
 	@sql-migrate up
 	
+test-all:
+	@go test -v ./... -tags=all
