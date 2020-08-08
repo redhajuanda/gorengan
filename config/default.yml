@@ -1,0 +1,9 @@
+Server:
+  Port: 3000
+
+Database:
+  Host: localhost
+  Port: 3306
+  Username: root
+  Password:
+  DBName: gorengan
