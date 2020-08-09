@@ -1,5 +1,10 @@
 Server:
+  Env: development
   Port: 3000
+
+JWT:
+  SigningKey: 5_F3gS6JsqK_RodESbauDQjXRhzyPXQRViaFn_Ccrig
+  TokenExpiration: 24
 
 Database:
   Host: localhost

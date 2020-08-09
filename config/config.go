@@ -14,7 +14,12 @@ import (
 // Config represents configuration variables
 type Config struct {
 	Server struct {
+		ENV  string `envconfig:"APP_ENV"`
 		PORT string `envconfig:"APP_PORT"`
+	}
+	JWT struct {
+		SigningKey      string `envconfig:"JWT_SIGNING_KEY"`
+		TokenExpiration int    `envconfig:"JWT_TOKEN_EXPIRATION"`
 	}
 	Database struct {
 		Host     string `envconfig:"DB_HOST"`

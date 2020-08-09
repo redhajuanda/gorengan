@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo"
+	"github.com/redhajuanda/gorengan/config"
 	"github.com/redhajuanda/gorengan/internal/auth"
 	"github.com/redhajuanda/gorengan/internal/httperror"
 	"github.com/redhajuanda/gorengan/internal/httpsuccess"
@@ -12,10 +13,10 @@ import (
 )
 
 // RegisterService registers a new user service
-func RegisterService(r echo.Group, service Service, logger log.Logger) {
+func RegisterService(r echo.Group, service Service, cfg config.Config, logger log.Logger) {
 	handler := handler{service, logger}
 
-	r.Use(auth.IsLoggedIn)
+	r.Use(auth.IsLoggedIn(cfg.JWT.SigningKey))
 	r.Use(auth.IsAdmin)
 
 	// the following endpoints require a valid JWT

@@ -47,7 +47,7 @@ func main() {
 	address := fmt.Sprintf(":%v", cfg.Server.PORT)
 	server := http.Server{
 		Addr:    address,
-		Handler: buildHandlers(db, logger),
+		Handler: buildHandlers(db, cfg, logger),
 	}
 	logger.Infof("server %v is running at %v", Version, address)
 
@@ -56,7 +56,7 @@ func main() {
 	}
 }
 
-func buildHandlers(db *sql.DB, logger log.Logger) http.Handler {
+func buildHandlers(db *sql.DB, cfg config.Config, logger log.Logger) http.Handler {
 	r := echo.New()
 	r.Pre(middleware.RemoveTrailingSlash())
 
@@ -67,13 +67,14 @@ func buildHandlers(db *sql.DB, logger log.Logger) http.Handler {
 	user.RegisterService(
 		*r.Group(""),
 		user.NewService(user.NewRepository(db), logger),
+		cfg,
 		logger,
 	)
 
 	// Register auth service
 	auth.RegisterService(
 		*r.Group(""),
-		auth.NewService("test", 1000, logger, auth.NewRepository(db)),
+		auth.NewService(cfg.JWT.SigningKey, cfg.JWT.TokenExpiration, logger, auth.NewRepository(db)),
 		logger,
 	)
 

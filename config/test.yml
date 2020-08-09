@@ -1,5 +1,10 @@
 Server:
+  Env: test
   Port: 3000
+
+JWT:
+  SigningKey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+  TokenExpiration: 24
 
 Database:
   Host: localhost

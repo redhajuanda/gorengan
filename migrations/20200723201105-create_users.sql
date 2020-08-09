@@ -11,5 +11,8 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `password`, `address`, `created_at`, `updated_at`) VALUES
+('c7a2df29-047c-4674-a553-0416d4325e6c',	'Super',	'Admin',	'super@admin.com',	'$2a$04$VdPk/HVxCz0ncH.QbPCRyOZCyp90ZAQjEfst3tCQS5pb5Riszl8c.',	'Jakarta',	'2020-08-09 11:30:25',	'2020-08-09 11:30:25');
+
 -- +migrate Down
 DROP TABLE users;

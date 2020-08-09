@@ -57,7 +57,7 @@ func (s service) Login(ctx context.Context, req LoginRequest) (string, error) {
 	if identity := s.authenticate(ctx, req.Email, req.Password); identity != nil {
 		return s.generateJWT(identity)
 	}
-	return "", httperror.Unauthorized("Cannot authenticate, invalid email or password")
+	return "", httperror.Unauthorized("Invalid email or password")
 }
 
 // authenticate authenticates a user using email and password.
